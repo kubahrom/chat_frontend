@@ -1,0 +1,22 @@
+{
+  "email": {
+    "label": "Email",
+    "placeholder": "Enter your email"
+  },
+  "password": {
+    "label": "Password",
+    "placeholder": "Enter your password"
+  },
+  "confirm_password": {
+    "label": "Confirm Password",
+    "placeholder": "Confirm your password"
+  },
+  "name": {
+    "label": "Name",
+    "placeholder": "Enter your name"
+  },
+  "chat_name": {
+    "label": "Chat name",
+    "placeholder": "Enter chat name"
+  }
+}

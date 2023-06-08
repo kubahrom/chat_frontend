@@ -1,0 +1,21 @@
+{
+  "general": {
+    "send": "Send",
+    "create": "Create"
+  },
+  "title": {
+    "first": "Real-time",
+    "second": "chat"
+  },
+  "chatrooms": {
+    "number_of": "Number of users: ",
+    "add": "Create chat",
+    "new": "New chat"
+  },
+  "home": {
+    "empty": "Select a chat to start chatting"
+  },
+  "chatroom": {
+    "users": "List of users"
+  }
+}

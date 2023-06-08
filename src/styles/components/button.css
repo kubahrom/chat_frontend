@@ -1,0 +1,10 @@
+.btn {
+  @apply min-h-[3rem] w-full rounded-md px-6 py-3 text-sm font-medium;
+}
+.btn-primary {
+  @apply bg-primary text-white hover:bg-primary-600;
+}
+
+.btn-text {
+  @apply hover:hover:bg-gray-700/20;
+}
