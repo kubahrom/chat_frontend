@@ -1,4 +1,4 @@
-import React, { forwardRef, InputHTMLAttributes, KeyboardEvent } from 'react';
+import React, { forwardRef, InputHTMLAttributes } from 'react';
 import { twMerge } from 'tailwind-merge';
 
 interface IBaseInput extends InputHTMLAttributes<HTMLInputElement> {

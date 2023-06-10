@@ -9,14 +9,17 @@ export type Chatrooms = {
 export type Chatroom = {
   id: string;
   name: string;
-  users: { name: string }[];
+  users: { name: string; id: string }[];
   authorId?: string;
 };
 
-export type ChatroomsData = {
-  data: Chatrooms[];
+export type ChatRoomsCreateInput = {
+  name: string;
+  users?: string[];
 };
 
-export type ChatroomData = {
-  data: Chatroom;
+export type ChatRoomsUpdateInput = {
+  chatroomId: string;
+  name?: string;
+  users?: string[];
 };

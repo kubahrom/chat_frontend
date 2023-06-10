@@ -5,11 +5,9 @@ import { NewChatModal } from './NewChatModal';
 
 type Props = {
   chatrooms?: Chatrooms[];
-  activeChat?: string | null;
-  setActiveChat: (id: string) => void;
 };
 
-const ChatRoomsList = ({ chatrooms, setActiveChat, activeChat }: Props) => {
+const ChatRoomsList = ({ chatrooms }: Props) => {
   return (
     <div className="min-w-[300px] flex-shrink-0 border-r border-slate-700 pr-4">
       <NewChatModal />
@@ -21,12 +19,7 @@ const ChatRoomsList = ({ chatrooms, setActiveChat, activeChat }: Props) => {
         ) : (
           <>
             {chatrooms?.map((chatroom) => (
-              <ChatRoomItem
-                key={chatroom.id}
-                chatroom={chatroom}
-                activeChat={activeChat}
-                setActiveChat={setActiveChat}
-              />
+              <ChatRoomItem key={chatroom.id} chatroom={chatroom} />
             ))}
           </>
         )}

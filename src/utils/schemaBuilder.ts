@@ -10,4 +10,5 @@ export const schemaBuilder = {
     .min(2, 'Name must be atleast 3 characters')
     .max(255),
   content: z.string().min(1).max(500),
+  users: z.array(z.string()),
 };

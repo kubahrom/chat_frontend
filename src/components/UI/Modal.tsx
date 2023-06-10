@@ -23,12 +23,12 @@ export const Modal: FC<Props> = ({
       <Dialog as="div" className="relative z-20" onClose={closeModal}>
         <Transition.Child
           as={Fragment}
-          enter="ease-out duration-300"
-          enterFrom="opacity-0"
+          enter="ease-out duration-200"
+          enterFrom="opacity-40"
           enterTo="opacity-100"
           leave="ease-in duration-200"
           leaveFrom="opacity-100"
-          leaveTo="opacity-0"
+          leaveTo="opacity-40"
         >
           <div className="fixed inset-0 bg-backdrop/60" />
         </Transition.Child>
@@ -36,12 +36,12 @@ export const Modal: FC<Props> = ({
         <div className="fixed inset-0 overflow-y-auto">
           <div className="flex min-h-full items-center justify-center p-4 text-center">
             <Transition.Child
-              enter="ease-out duration-300 "
-              enterFrom="opacity-0 scale-95"
-              enterTo="opacity-100 scale-100"
+              enter="ease-out duration-300"
+              enterFrom="scale-95"
+              enterTo="scale-100"
               leave="ease-in duration-200"
-              leaveFrom="opacity-100 scale-100"
-              leaveTo="opacity-0 scale-95"
+              leaveFrom=" scale-100"
+              leaveTo="scale-95"
               className="w-full max-w-full md:w-auto"
             >
               <Dialog.Panel

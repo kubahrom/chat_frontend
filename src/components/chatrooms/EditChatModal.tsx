@@ -1,32 +1,39 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import useTranslation from 'next-translate/useTranslation';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { zodResolver } from '@hookform/resolvers/zod';
 
 import useBoolean from '@/hooks/useBoolean';
 import { Button } from '../UI/Button';
-import { AddIcon } from '../icons/AddIcon';
 import { Modal } from '../UI/Modal';
 import { schemaBuilder } from '@/utils/schemaBuilder';
 import { Input } from '../inputs/Input';
-import { createChatRoom } from '@/modules/chatrooms';
+import { updateChatRoom } from '@/modules/chatrooms';
+import { Chatroom } from '@/types/chatroom';
+import { EditIcon } from '../icons/EditIcon';
 import { UserSelect } from '../inputs/UserSelect';
+import { DeleteChatModal } from './DeleteChatModal';
 
-export const NewChatModal = () => {
+type Props = {
+  chatroom: Chatroom;
+  userId: string;
+};
+
+export const EditChatModal = ({ chatroom, userId }: Props) => {
   const { t } = useTranslation();
   const { value, setTrue, setFalse } = useBoolean();
   const {
     methods: {
       register,
-      control,
       formState: { errors },
       reset,
+      control,
     },
     onSubmit,
     isLoading,
-  } = useNewChat(setFalse);
+  } = useEditChat(chatroom, userId, setFalse);
 
   const handleOpen = () => {
     setTrue();
@@ -37,16 +44,15 @@ export const NewChatModal = () => {
     <>
       <Button
         variant="text"
-        className="mb-3 ml-auto mr-0 flex w-auto items-center py-2 pl-2 pr-4 text-slate-400"
+        className="ml-2 min-h-0 w-auto p-1.5 text-slate-400"
         onClick={handleOpen}
       >
-        <AddIcon className="w-6" />
-        {t('common:chatrooms.add')}
+        <EditIcon className="w-5" />
       </Button>
       <Modal
         isOpen={value}
         closeModal={setFalse}
-        title={t('common:chatrooms.new')}
+        title={t('common:chatrooms.edit')}
       >
         <form className="" onSubmit={onSubmit}>
           <Input
@@ -57,36 +63,57 @@ export const NewChatModal = () => {
             error={errors.name?.message}
           />
           <UserSelect control={control} name="users" />
-          <Button className="mt-6 min-h-[50px] w-full" disabled={isLoading}>
-            {t('common:general.create')}
-          </Button>
+          <div className="mt-6 flex gap-3">
+            <DeleteChatModal chatroomId={chatroom.id} callback={setFalse} />
+            <Button className="min-h-[50px] w-full" disabled={isLoading}>
+              {t('common:general.edit')}
+            </Button>
+          </div>
         </form>
       </Modal>
     </>
   );
 };
 
-const useNewChat = (callback: () => void) => {
+const useEditChat = (
+  chatroom: Chatroom,
+  userId: string,
+  callback: () => void,
+) => {
   const methods = useForm<NewChatFormValues>({
     mode: 'onSubmit',
     resolver: zodResolver(newChatSchema),
     defaultValues: {
-      name: '',
-      users: [],
+      name: chatroom.name,
+      users:
+        chatroom.users
+          .map((user) => user.id)
+          .filter((user) => user !== userId) || [],
     },
   });
 
+  useEffect(() => {
+    methods.reset({
+      name: chatroom.name,
+      users:
+        chatroom.users
+          .map((user) => user.id)
+          .filter((user) => user !== userId) || [],
+    });
+  }, [chatroom, userId, methods]);
+
   const queryClient = useQueryClient();
 
-  const { mutate, isLoading } = useMutation(createChatRoom, {
+  const { mutate, isLoading } = useMutation(updateChatRoom, {
     onSuccess: (chatroom) => {
       callback();
+
       queryClient.invalidateQueries(['chatrooms']);
     },
   });
 
   const onSubmit = methods.handleSubmit((data) => {
-    mutate(data);
+    mutate({ ...data, chatroomId: chatroom.id });
   });
 
   return { methods, onSubmit, isLoading };

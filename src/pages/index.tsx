@@ -1,4 +1,4 @@
-import React, { ReactElement, useState } from 'react';
+import React, { ReactElement } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import useTranslation from 'next-translate/useTranslation';
 
@@ -6,55 +6,44 @@ import { Layout } from '@/components/layouts/Layout';
 import { useProtectedRoute } from '@/hooks/useProtectedRoute';
 import { Card } from '@/components/UI/Card';
 import ChatRoomsList from '@/components/chatrooms/ChatRoomsList';
-// import { useToken } from '@/hooks/useToken';
 import { getChatRoom, getChatRooms } from '@/modules/chatrooms';
 import { FullScreenLoader } from '@/components/UI/FullScreenLoader';
 import { PageTitle } from '@/components/UI/PageTitle';
 import { useUser } from '@/hooks/useUser';
 import { LoadingSpinner } from '@/components/UI/LoadingSpinner';
-import { ChatRoom } from '@/components/chatroom/ChatRoom';
+import { ChatRoom } from '@/components/chatrooms/ChatRoom';
+import { getUsers } from '@/modules/users';
+import { useGlobalStoreState } from '@/store/globalStore';
 
 export default function HomePage() {
-  // useToken();
   useProtectedRoute();
   const { t } = useTranslation();
   const { user } = useUser();
-  const [activeChat, setActiveChat] = useState<string | null>(null);
+  const { activeChat } = useGlobalStoreState();
 
   const { data: chatrooms, isLoading: isLoadingChatrooms } = useQuery(
     ['chatrooms'],
     getChatRooms,
     {
       staleTime: Infinity,
+      keepPreviousData: true,
       enabled: !!user,
     },
   );
 
   const { data: chatroom, isLoading: isLoadingChatroom } = useQuery(
-    ['chatroom', activeChat],
+    ['chatrooms', activeChat],
     () => getChatRoom(activeChat || ''),
     {
       staleTime: Infinity,
       enabled: !!activeChat,
+      keepPreviousData: true,
     },
   );
 
-  // useEffect(() => {
-  //   if (user) {
-  //     const websocket = new WebSocket(`ws://localhost:3000/?at=${user.at}`);
-  //     websocket.onopen = () => {
-  //       console.log('connected');
-  //     };
-
-  //     websocket.onmessage = (message) => {
-  //       console.log(message);
-  //     };
-
-  //     return () => {
-  //       websocket.close();
-  //     };
-  //   }
-  // }, [user]);
+  useQuery(['users'], getUsers, {
+    staleTime: Infinity,
+  });
 
   return (
     <>
@@ -63,22 +52,23 @@ export default function HomePage() {
         <FullScreenLoader />
       ) : (
         <Card className="flex h-[750px] w-[1000px] px-7 py-6">
-          <ChatRoomsList
-            chatrooms={chatrooms}
-            setActiveChat={setActiveChat}
-            activeChat={activeChat}
-          />
-          {!activeChat && (
+          <ChatRoomsList chatrooms={chatrooms} />
+          {!activeChat ? (
             <div className="grid w-full place-content-center text-slate-500">
               {t('common:home.empty')}
             </div>
+          ) : (
+            <>
+              {isLoadingChatroom && (
+                <div className="grid h-full w-full place-items-center">
+                  <LoadingSpinner />
+                </div>
+              )}
+              {!isLoadingChatroom && chatroom && (
+                <ChatRoom chatroom={chatroom} />
+              )}
+            </>
           )}
-          {activeChat && isLoadingChatroom && (
-            <div className="grid h-full w-full place-items-center">
-              <LoadingSpinner />
-            </div>
-          )}
-          {!isLoadingChatroom && chatroom && <ChatRoom chatroom={chatroom} />}
         </Card>
       )}
     </>

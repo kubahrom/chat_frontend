@@ -16,7 +16,7 @@ import '@/styles/globals.css';
 import { GlobalStoreProvider, useGlobalStore } from '@/store/globalStore';
 import { useUser } from '@/hooks/useUser';
 import { FullScreenLoader } from '@/components/UI/FullScreenLoader';
-import { getUser, handleLogout, logout } from '@/modules/auth';
+import { me, handleLogout, logout } from '@/modules/auth';
 
 type NextPageWithLayout = NextPage & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -60,7 +60,7 @@ const Initializer: FC<PropsWithChildren> = ({ children }) => {
     const lsAutoLogin = localStorage.getItem('auto-login');
 
     if (lsAutoLogin) {
-      await getUser()
+      await me()
         .then((user) => {
           setUser(user);
         })

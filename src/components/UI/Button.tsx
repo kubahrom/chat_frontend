@@ -2,7 +2,7 @@ import React, { ButtonHTMLAttributes, forwardRef } from 'react';
 import { twMerge } from 'tailwind-merge';
 
 interface IButton extends ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary' | 'text';
+  variant?: 'primary' | 'outlined' | 'text';
 }
 
 export const Button = forwardRef<HTMLButtonElement, IButton>(

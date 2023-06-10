@@ -8,3 +8,7 @@
 .btn-text {
   @apply hover:hover:bg-gray-700/20;
 }
+
+.btn-outlined {
+  @apply border border-slate-500 text-slate-300 hover:bg-gray-700/20;
+}

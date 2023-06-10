@@ -12,6 +12,9 @@ module.exports = {
         secondary: { DEFAULT: '#4899ff' },
         backdrop: '#020513',
       },
+      spacing: {
+        1.5: '0.375rem',
+      },
     },
   },
   plugins: [],

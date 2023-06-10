@@ -13,7 +13,11 @@ export const ChatMessage: FC<Props> = ({ children, mine, afterSame }) => {
     >
       {!mine && (
         <div className="mr-2 w-6">
-          {!afterSame && <div className="h-6 w-6 rounded-full bg-gray-500" />}
+          {!afterSame && (
+            <div className="grid h-6 w-6 place-items-center rounded-full bg-gray-500 text-xs">
+              T
+            </div>
+          )}
         </div>
       )}
       <p

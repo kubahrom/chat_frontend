@@ -4,11 +4,11 @@ import api from '@/utils/api';
 import { LoginInputs, RegisterInputs } from '@/types/auth';
 import { UserData } from '@/types/users';
 
-export const getUser = async () => {
+export const me = async () => {
   try {
     const res = await api.get('/auth/me');
     const { data } = res.data as UserData;
-    handleLogin(data.at);
+    handleLogin();
     return data;
   } catch (error) {
     const e = error as AxiosError<{ message: string }>;
@@ -20,7 +20,7 @@ export const login = async (input: LoginInputs) => {
   try {
     const res = await api.post('/auth/login', input);
     const { data } = res.data as UserData;
-    handleLogin(data.at);
+    handleLogin();
     return data;
   } catch (error) {
     const e = error as AxiosError<{ message: string }>;
@@ -32,7 +32,7 @@ export const register = async (input: RegisterInputs) => {
   try {
     const res = await api.post('/auth/register', input);
     const { data } = res.data as UserData;
-    handleLogin(data.at);
+    handleLogin();
     return data;
   } catch (error) {
     const e = error as AxiosError<{ message: string }>;
@@ -50,19 +50,15 @@ export const refreshToken = async () => {
   try {
     const res = await api.post('/auth/refresh', {});
     const { data } = res.data as { data: string };
-    handleLogin(data);
+    handleLogin();
     return data;
   } catch (_) {}
 };
 
-export const handleLogin = (token: string) => {
-  api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+export const handleLogin = () => {
   localStorage.setItem('auto-login', '1');
-  localStorage.setItem('at', token);
 };
 
 export const handleLogout = () => {
-  api.defaults.headers.common['Authorization'] = '';
   localStorage.removeItem('auto-login');
-  localStorage.removeItem('at');
 };

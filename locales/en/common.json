@@ -1,7 +1,9 @@
 {
   "general": {
     "send": "Send",
-    "create": "Create"
+    "create": "Create",
+    "edit": "Edit",
+    "cancel": "Cancel"
   },
   "title": {
     "first": "Real-time",
@@ -10,12 +12,18 @@
   "chatrooms": {
     "number_of": "Number of users: ",
     "add": "Create chat",
-    "new": "New chat"
+    "new": "New chat",
+    "edit": "Edit chat"
   },
   "home": {
     "empty": "Select a chat to start chatting"
   },
   "chatroom": {
     "users": "List of users"
+  },
+  "delete": {
+    "title": "Delete chat",
+    "message": "Are you sure you want to delete this chat?",
+    "confirm": "Yes, delete"
   }
 }

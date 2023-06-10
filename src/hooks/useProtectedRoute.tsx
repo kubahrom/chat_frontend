@@ -31,7 +31,7 @@ export const useProtectedRoute: (revert?: boolean) => null = (revert) => {
         loader: false,
       }));
     }
-  }, [user, init]);
+  }, [user, init, revert, router, setGlobalStore]);
 
   return null;
 };
