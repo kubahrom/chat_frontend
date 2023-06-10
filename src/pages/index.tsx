@@ -14,6 +14,7 @@ import { LoadingSpinner } from '@/components/UI/LoadingSpinner';
 import { ChatRoom } from '@/components/chatrooms/ChatRoom';
 import { getUsers } from '@/modules/users';
 import { useGlobalStoreState } from '@/store/globalStore';
+import { getMessages } from '@/modules/messages';
 
 export default function HomePage() {
   useProtectedRoute();
@@ -41,6 +42,16 @@ export default function HomePage() {
     },
   );
 
+  useQuery(
+    ['messages', activeChat],
+    () => getMessages({ id: activeChat || '' }),
+    {
+      staleTime: Infinity,
+      enabled: !!activeChat,
+      keepPreviousData: true,
+    },
+  );
+
   useQuery(['users'], getUsers, {
     staleTime: Infinity,
   });
@@ -51,7 +62,7 @@ export default function HomePage() {
       {isLoadingChatrooms ? (
         <FullScreenLoader />
       ) : (
-        <Card className="flex h-[750px] w-[1000px] px-7 py-6">
+        <Card className="flex h-[750px] w-[1000px] px-7 pb-7 pt-6">
           <ChatRoomsList chatrooms={chatrooms} />
           {!activeChat ? (
             <div className="grid w-full place-content-center text-slate-500">
@@ -65,7 +76,7 @@ export default function HomePage() {
                 </div>
               )}
               {!isLoadingChatroom && chatroom && (
-                <ChatRoom chatroom={chatroom} />
+                <ChatRoom chatroom={chatroom} activeChat={activeChat} />
               )}
             </>
           )}

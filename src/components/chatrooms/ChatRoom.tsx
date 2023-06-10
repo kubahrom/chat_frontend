@@ -6,14 +6,28 @@ import { Chat } from '../chat/Chat';
 import { EditChatModal } from './EditChatModal';
 import { useUser } from '@/hooks/useUser';
 import { ChatForm } from '../chat/ChatForm';
+import { useQuery } from '@tanstack/react-query';
+import { getMessages } from '@/modules/messages';
+import { LoadingSpinner } from '../UI/LoadingSpinner';
 
 type Props = {
   chatroom: Chatroom;
+  activeChat: string;
 };
 
-export const ChatRoom = ({ chatroom }: Props) => {
+export const ChatRoom = ({ chatroom, activeChat }: Props) => {
   const { t } = useTranslation();
   const { user } = useUser();
+  const { data, isLoading } = useQuery(
+    ['messages', activeChat],
+    () => getMessages({ id: activeChat || '' }),
+    {
+      staleTime: Infinity,
+      enabled: !!activeChat,
+      keepPreviousData: true,
+    },
+  );
+
   return (
     <div className="flex w-full flex-col px-6">
       <div className="flex min-h-0 flex-grow flex-col">
@@ -40,8 +54,16 @@ export const ChatRoom = ({ chatroom }: Props) => {
             ))}
           </div>
         </div>
-        <Chat chatroomId={chatroom.id} />
-        <ChatForm />
+        {isLoading ? (
+          <div className="grid h-full w-full place-items-center">
+            <LoadingSpinner />
+          </div>
+        ) : (
+          <>
+            <Chat chatroomId={chatroom.id} messages={data} />
+            <ChatForm chatroomId={chatroom.id} />
+          </>
+        )}
       </div>
     </div>
   );

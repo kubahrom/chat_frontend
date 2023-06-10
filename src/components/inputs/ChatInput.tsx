@@ -1,5 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import { UseFormRegister, UseFormSetValue, FieldError } from 'react-hook-form';
+import React, { useEffect, useRef, useState } from 'react';
+import {
+  UseFormRegister,
+  UseFormSetValue,
+  FieldError,
+  UseFormWatch,
+} from 'react-hook-form';
 import { twMerge } from 'tailwind-merge';
 
 type Props = {
@@ -9,11 +14,30 @@ type Props = {
   setValue: UseFormSetValue<{
     content: string;
   }>;
+  watch: UseFormWatch<{
+    content: string;
+  }>;
   error: FieldError | undefined;
 };
 
-export const ChatInput = ({ register, setValue, error }: Props) => {
+export const ChatInput = ({ register, setValue, error, watch }: Props) => {
   const [messageRef, setMessageRef] = useState<HTMLDivElement | null>(null);
+  const buttonRef = useRef<HTMLButtonElement | null>(null);
+  const content = watch('content');
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      e.stopPropagation();
+      buttonRef.current?.click();
+    }
+  };
+
+  useEffect(() => {
+    if (messageRef && content === '') {
+      messageRef.textContent = '';
+    }
+  }, [content, messageRef]);
 
   useEffect(() => {
     const handlePaste = (e: ClipboardEvent) => {
@@ -38,8 +62,10 @@ export const ChatInput = ({ register, setValue, error }: Props) => {
   useEffect(() => {
     if (error) messageRef?.focus();
   }, [error, messageRef]);
+
   return (
     <div className="relative w-full max-w-[calc(100%-3.5rem)]">
+      <button className="hidden" ref={buttonRef}></button>
       <div
         {...register('content')}
         tabIndex={0}
@@ -53,6 +79,7 @@ export const ChatInput = ({ register, setValue, error }: Props) => {
             : 'focus:ring-2 focus:ring-primary',
         ])}
         contentEditable
+        onKeyDown={handleKeyDown}
         onInput={(e) => {
           setValue('content', e.currentTarget.textContent || '', {
             shouldValidate: true,
