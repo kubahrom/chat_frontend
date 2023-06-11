@@ -14,7 +14,6 @@ import { LoadingSpinner } from '@/components/UI/LoadingSpinner';
 import { ChatRoom } from '@/components/chatrooms/ChatRoom';
 import { getUsers } from '@/modules/users';
 import { useGlobalStoreState } from '@/store/globalStore';
-import { getMessages } from '@/modules/messages';
 
 export default function HomePage() {
   useProtectedRoute();
@@ -35,16 +34,6 @@ export default function HomePage() {
   const { data: chatroom, isLoading: isLoadingChatroom } = useQuery(
     ['chatrooms', activeChat],
     () => getChatRoom(activeChat || ''),
-    {
-      staleTime: Infinity,
-      enabled: !!activeChat,
-      keepPreviousData: true,
-    },
-  );
-
-  useQuery(
-    ['messages', activeChat],
-    () => getMessages({ id: activeChat || '' }),
     {
       staleTime: Infinity,
       enabled: !!activeChat,

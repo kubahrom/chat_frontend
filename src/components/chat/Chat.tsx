@@ -1,4 +1,5 @@
 import React, { useState, useEffect, Fragment } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 import { ChatMessage } from './ChatMessage';
 import { Message } from '@/types/messages';
 import { useUser } from '@/hooks/useUser';
@@ -11,31 +12,33 @@ type Props = {
 export const Chat = ({ chatroomId, messages }: Props) => {
   const [chatRef, setChatRef] = useState<HTMLDivElement | null>(null);
   const { user } = useUser();
+  const queryClient = useQueryClient();
 
-  // useEffect(() => {
-  //   if (user) {
-  //     const websocket = new WebSocket(`ws://localhost:3000/?id=456`);
-  //     websocket.onopen = () => {
-  //       console.log('connected');
-  //     };
+  useEffect(() => {
+    if (user) {
+      const websocket = new WebSocket(`ws://localhost:3000/?id=${chatroomId}`);
 
-  //     websocket.onmessage = (message) => {
-  //       console.log(message);
-  //     };
+      websocket.onmessage = (message) => {
+        const messageData: Message = JSON.parse(message.data).payload;
 
-  //     websocket.onclose = () => {
-  //       console.log('disconnected');
-  //     };
-  //     websocket.onerror = (error) => {
-  //       console.log(error);
-  //     };
+        const oldMessages = queryClient.getQueryData<Message[]>([
+          'messages',
+          chatroomId,
+        ]);
 
-  //     return () => {
-  //       console.log('closing');
-  //       websocket.close();
-  //     };
-  //   }
-  // }, [user]);
+        queryClient.setQueryData<Message[]>(
+          ['messages', chatroomId],
+          oldMessages ? [...oldMessages, messageData] : [messageData],
+        );
+
+        websocket.onerror = (error) => {
+          console.log(error);
+        };
+      };
+
+      return () => websocket.close();
+    }
+  }, [user, chatroomId, queryClient]);
 
   useEffect(() => {
     if (chatRef) {

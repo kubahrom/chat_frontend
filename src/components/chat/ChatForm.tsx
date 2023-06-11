@@ -9,6 +9,7 @@ import { schemaBuilder } from '@/utils/schemaBuilder';
 import { Button } from '../UI/Button';
 import { SendChatIcon } from '../icons/SendChatIcon';
 import { addMessage } from '@/modules/messages';
+import { toast } from 'react-hot-toast';
 
 type Props = {
   chatroomId: string;
@@ -62,6 +63,14 @@ export const useChatForm = (chatroomId: string) => {
         message,
       ]);
       methods.setValue('content', '');
+    },
+    onError: (error: Error) => {
+      toast.error(error.message, {
+        style: {
+          background: '#333',
+          color: '#fff',
+        },
+      });
     },
   });
 
