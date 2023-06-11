@@ -12,7 +12,7 @@ export const me = async () => {
     return data;
   } catch (error) {
     const e = error as AxiosError<{ message: string }>;
-    throw new Error(e.response?.data.message);
+    throw new Error(e.response?.data.message || e.message);
   }
 };
 
@@ -24,7 +24,7 @@ export const login = async (input: LoginInputs) => {
     return data;
   } catch (error) {
     const e = error as AxiosError<{ message: string }>;
-    throw new Error(e.response?.data.message);
+    throw new Error(e.response?.data.message || e.message);
   }
 };
 
