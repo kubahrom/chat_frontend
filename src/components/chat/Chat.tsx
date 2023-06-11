@@ -1,5 +1,7 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
+import useTranslation from 'next-translate/useTranslation';
+
 import { ChatMessage } from './ChatMessage';
 import { Message } from '@/types/messages';
 import { useUser } from '@/hooks/useUser';
@@ -10,6 +12,7 @@ type Props = {
 };
 
 export const Chat = ({ chatroomId, messages }: Props) => {
+  const { t } = useTranslation();
   const [chatRef, setChatRef] = useState<HTMLDivElement | null>(null);
   const { user } = useUser();
   const queryClient = useQueryClient();
@@ -75,7 +78,7 @@ export const Chat = ({ chatroomId, messages }: Props) => {
           ))}
         </>
       ) : (
-        <>No messages yet</>
+        <p className="text-slate-400">{t('common:chatrooms.no_messages')}</p>
       )}
     </div>
   );

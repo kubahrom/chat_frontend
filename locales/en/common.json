@@ -3,7 +3,8 @@
     "send": "Send",
     "create": "Create",
     "edit": "Edit",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "logout": "Logout"
   },
   "title": {
     "first": "Real-time",
@@ -13,7 +14,9 @@
     "number_of": "Number of users: ",
     "add": "Create chat",
     "new": "New chat",
-    "edit": "Edit chat"
+    "edit": "Edit chat",
+    "no_chatrooms": "You don't have any chats yet",
+    "no_messages": "No messages yet"
   },
   "home": {
     "empty": "Select a chat to start chatting"

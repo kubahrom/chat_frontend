@@ -4,7 +4,6 @@ import useTranslation from 'next-translate/useTranslation';
 
 import { Layout } from '@/components/layouts/Layout';
 import { useProtectedRoute } from '@/hooks/useProtectedRoute';
-import { Card } from '@/components/UI/Card';
 import ChatRoomsList from '@/components/chatrooms/ChatRoomsList';
 import { getChatRoom, getChatRooms } from '@/modules/chatrooms';
 import { FullScreenLoader } from '@/components/UI/FullScreenLoader';
@@ -51,10 +50,10 @@ export default function HomePage() {
       {isLoadingChatrooms ? (
         <FullScreenLoader />
       ) : (
-        <Card className="flex h-[750px] w-[1000px] px-7 pb-7 pt-6">
+        <>
           <ChatRoomsList chatrooms={chatrooms} />
           {!activeChat ? (
-            <div className="grid w-full place-content-center text-slate-500">
+            <div className="hidden w-full place-content-center text-slate-500 md:grid">
               {t('common:home.empty')}
             </div>
           ) : (
@@ -69,7 +68,7 @@ export default function HomePage() {
               )}
             </>
           )}
-        </Card>
+        </>
       )}
     </>
   );

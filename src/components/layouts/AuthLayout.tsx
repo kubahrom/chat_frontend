@@ -1,11 +1,11 @@
 import Image from 'next/image';
 import React, { FC, PropsWithChildren } from 'react';
 
-export const Layout: FC<PropsWithChildren> = ({ children }) => {
+export const AuthLayout: FC<PropsWithChildren> = ({ children }) => {
   return (
     <main
       className="relative grid min-h-screen w-full
-    overflow-hidden bg-slate-900 text-slate-200 md:place-items-center"
+    overflow-hidden bg-slate-900 text-slate-200 sm:place-items-center"
     >
       <div className="absolute h-full w-full">
         <div className="absolute grid h-full w-full place-items-center after:absolute after:inset-0 after:bg-black/30">
@@ -32,8 +32,10 @@ export const Layout: FC<PropsWithChildren> = ({ children }) => {
           />
         </div>
       </div>
-      <div className="z-10 flex max-h-screen w-full bg-slate-950/30 px-7 pb-7 pt-6 shadow-md backdrop-blur-sm md:h-[750px] md:w-[750px] md:rounded-[16px] lg:w-[1000px]">
-        {children}
+      <div className="z-10 w-full bg-slate-950/30 px-10 py-16 shadow-md backdrop-blur-sm  sm:w-auto sm:min-w-[500px] sm:rounded-[16px] sm:px-16 sm:py-12">
+        <div className="grid h-full place-items-center">
+          <div className="w-full max-w-[372px] sm:max-w-none">{children}</div>
+        </div>
       </div>
     </main>
   );
