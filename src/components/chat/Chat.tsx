@@ -19,7 +19,9 @@ export const Chat = ({ chatroomId, messages }: Props) => {
 
   useEffect(() => {
     if (user) {
-      const websocket = new WebSocket(`ws://localhost:3000/?id=${chatroomId}`);
+      const websocket = new WebSocket(
+        `${process.env.NEXT_PUBLIC_WEBSOCKET_URL}/?id=${chatroomId}`,
+      );
 
       websocket.onmessage = (message) => {
         const messageData: Message = JSON.parse(message.data).payload;
