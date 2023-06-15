@@ -34,7 +34,7 @@ export const ChatMessage: FC<Props> = ({
       )}
       <p
         className={twMerge([
-          'w-3/5 max-w-max rounded-lg px-3 py-2 text-sm first:mt-0',
+          'w-3/5 max-w-max whitespace-pre-wrap rounded-lg px-3 py-2 text-sm first:mt-0',
           mine
             ? 'rounded-br-none bg-primary-600/80 text-white'
             : 'rounded-bl-none bg-slate-800/70',

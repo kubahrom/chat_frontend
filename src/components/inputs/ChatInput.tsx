@@ -81,7 +81,7 @@ export const ChatInput = ({ register, setValue, error, watch }: Props) => {
         contentEditable
         onKeyDown={handleKeyDown}
         onInput={(e) => {
-          setValue('content', e.currentTarget.textContent || '', {
+          setValue('content', e.currentTarget.innerText || '', {
             shouldValidate: true,
           });
         }}
